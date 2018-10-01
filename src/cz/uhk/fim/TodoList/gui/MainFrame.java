@@ -2,15 +2,10 @@ package cz.uhk.fim.TodoList.gui;
 
 import cz.uhk.fim.TodoList.model.TodoItem;
 import cz.uhk.fim.TodoList.model.TodoList;
-import sun.plugin2.message.Message;
-import sun.plugin2.message.Serializer;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.IOException;
+
 
 public class MainFrame extends JFrame {
 
