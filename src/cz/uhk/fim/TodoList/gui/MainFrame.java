@@ -1,9 +1,23 @@
 package cz.uhk.fim.TodoList.gui;
 
+import cz.uhk.fim.TodoList.model.TodoItem;
+import cz.uhk.fim.TodoList.model.TodoList;
+import sun.plugin2.message.Message;
+import sun.plugin2.message.Serializer;
+
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
 
 public class MainFrame extends JFrame {
+
+    private JTable table;
+    private TodoTableModel model;
+    private TodoList todoList;
+
     public MainFrame() {
         init();
     }
@@ -14,20 +28,47 @@ public class MainFrame extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
+        model = new TodoTableModel();
+        todoList = new TodoList();
+        model.setList(todoList);
+
+
         initControlPanel();
+        initContentPanel();
     }
 
-    private void initControlPanel(){
-        JPanel controlPaanel = new JPanel(new BorderLayout());
+    private void initContentPanel() {
+        table = new JTable();
+        table.setModel(model);
+
+        add(new JScrollPane(table), BorderLayout.CENTER);
+    }
+
+    private void initControlPanel() {
+        JPanel controlPanel = new JPanel(new BorderLayout());
         JLabel lblAddTodo = new JLabel("Zadej todo:");
         JTextField txtAddTodo = new JTextField();
-        JButton btnAdd = new JButton("pridat");
+        JButton btnAdd = new JButton("Přidat");
 
-        controlPaanel.add(lblAddTodo,BorderLayout.WEST);
-        controlPaanel.add(txtAddTodo, BorderLayout.CENTER);
-        controlPaanel.add(btnAdd,BorderLayout.EAST);
+        btnAdd.addActionListener(e -> {
+            if (txtAddTodo.getText().trim().length() > 0) {
+                todoList.addItem(new TodoItem(txtAddTodo.getText().trim()));
+                txtAddTodo.setText("");
+                model.setList(todoList);
+            } else {
+                JOptionPane.showMessageDialog(null,
+                        "Nelze pridat prázdnou Todo polozku",
+                        "Chyba",
+                        JOptionPane.WARNING_MESSAGE);
+            }
 
-        add(controlPaanel,BorderLayout.NORTH);
+        });
+
+        controlPanel.add(lblAddTodo, BorderLayout.WEST);
+        controlPanel.add(txtAddTodo, BorderLayout.CENTER);
+        controlPanel.add(btnAdd, BorderLayout.EAST);
+
+        add(controlPanel, BorderLayout.NORTH);
 
     }
 }
